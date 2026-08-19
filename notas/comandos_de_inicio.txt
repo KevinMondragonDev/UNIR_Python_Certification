@@ -1,0 +1,15 @@
+Necesitas crear el entorno antes de poder activarlo. Ejecuta el siguiente comando en tu terminal (puedes cambiar 3.10 por la versión de Python que requiera tu maestría):
+
+PowerShell
+"""
+conda create --name desarrollo python=3.10
+
+"""
+
+
+PowerShell 
+
+"""
+conda activate desarrollo
+
+""
