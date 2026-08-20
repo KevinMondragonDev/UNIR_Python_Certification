@@ -6,11 +6,26 @@ Repositorio de estudio y práctica para la certificación de Python dentro del p
 
 ```
 master_python_certification/
-├── fundamentals/       # Fundamentos del lenguaje Python
+├── 01_fundamentos/
 │   └── helloWorld.py
-├── notas/              # Notas y comandos de referencia
-│   └── comandos_de_inicio.txt
-└── README.md
+├── 02_sintaxis/
+│   ├── tema_04_funciones/
+│   ├── tema_05_organizacion/
+│   ├── tema_06_avanzados/
+│   ├── tema_07_analisis_datos/
+│   └── tema_08_visualizacion/
+├── 03_retos/
+│   ├── nivel_1_basico/
+│   ├── nivel_2_archivos/
+│   ├── nivel_3_profesional/
+│   ├── nivel_4_data_engineering/
+│   ├── nivel_5_aws/
+│   └── nivel_6_pyspark/
+├── notas/
+│   ├── comandos_de_inicio.md
+│   └── convenciones.md
+├── README.md
+└── .gitignore
 ```
 
 ## 🚀 Configuración del Entorno
@@ -34,7 +49,9 @@ conda activate desarrollo
 
 | Módulo | Descripción |
 |---|---|
-| `fundamentals/` | Conceptos básicos y primeros scripts de Python |
+| `01_fundamentos/` | Conceptos básicos y primeros scripts de Python |
+| `02_sintaxis/` | Ejercicios organizados por temas de la maestría |
+| `03_retos/` | Retos prácticos divididos por niveles de dificultad |
 | `notas/` | Comandos y referencias útiles para el proyecto |
 
 ## 👤 Autor
