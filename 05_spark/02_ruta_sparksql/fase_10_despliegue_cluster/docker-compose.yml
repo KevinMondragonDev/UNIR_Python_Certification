@@ -1,0 +1,69 @@
+# ─────────────────────────────────────────────────────────────
+# FASE 10 — Clúster Spark Standalone con Docker (1 master + 2 workers)
+# ─────────────────────────────────────────────────────────────
+# Levantar:   docker compose up -d
+# UI master:  http://localhost:8080
+# Enviar job (desde DENTRO del master, así driver y executors usan
+# la misma versión de Spark y de Python):
+#
+#   docker exec -it spark-master /opt/spark/bin/spark-submit \
+#       --master spark://spark-master:7077 \
+#       --executor-cores 1 --executor-memory 1g --total-executor-cores 4 \
+#       /opt/workspace/fase_10_despliegue_cluster/01_job_spark_submit.py \
+#       --salida /opt/workspace/fase_10_despliegue_cluster/output/reporte
+#
+# Apagar:     docker compose down
+#
+# Nota: la carpeta 02_ruta_sparksql/ se monta en /opt/workspace en TODOS los
+# contenedores. En un clúster real los executors leen de almacenamiento
+# compartido (HDFS, S3, ADLS); aquí el volumen hace ese papel.
+# ─────────────────────────────────────────────────────────────
+
+x-spark-common: &spark-common
+  image: spark:3.5.3-scala2.12-java17-python3-ubuntu
+  user: root
+  volumes:
+    - ../:/opt/workspace
+  environment: &spark-env
+    SPARK_NO_DAEMONIZE: "true"
+    PYSPARK_PYTHON: python3
+
+services:
+  spark-master:
+    <<: *spark-common
+    container_name: spark-master
+    hostname: spark-master
+    command: /opt/spark/sbin/start-master.sh
+    ports:
+      - "8080:8080"   # UI del master
+      - "7077:7077"   # puerto RPC del master
+      - "4040:4040"   # UI del driver (mientras corre un job enviado desde aquí)
+
+  spark-worker-1:
+    <<: *spark-common
+    container_name: spark-worker-1
+    hostname: spark-worker-1
+    command: /opt/spark/sbin/start-worker.sh spark://spark-master:7077
+    environment:
+      <<: *spark-env
+      SPARK_WORKER_CORES: "2"
+      SPARK_WORKER_MEMORY: "2g"
+    ports:
+      - "8081:8081"
+    depends_on:
+      - spark-master
+
+  spark-worker-2:
+    <<: *spark-common
+    container_name: spark-worker-2
+    hostname: spark-worker-2
+    command: /opt/spark/sbin/start-worker.sh spark://spark-master:7077
+    environment:
+      <<: *spark-env
+      SPARK_WORKER_CORES: "2"
+      SPARK_WORKER_MEMORY: "2g"
+      SPARK_WORKER_WEBUI_PORT: "8082"
+    ports:
+      - "8082:8082"
+    depends_on:
+      - spark-master
