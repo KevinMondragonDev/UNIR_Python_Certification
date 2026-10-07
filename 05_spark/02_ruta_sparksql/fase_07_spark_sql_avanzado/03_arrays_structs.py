@@ -45,12 +45,14 @@ print("=" * 55)
 print("2. Acceder a elementos de Array")
 print("=" * 55)
 
+# ⚠️ Spark 4 activa el modo ANSI por defecto: tags[1] lanza error si el array
+#    tiene 1 solo elemento. GET(tags, 1) devuelve NULL en ese caso.
 spark.sql("""
     SELECT
         event_id,
         tags,
         tags[0]        AS primer_tag,
-        tags[1]        AS segundo_tag,
+        GET(tags, 1)   AS segundo_tag,
         SIZE(tags)     AS num_tags
     FROM eventos
     LIMIT 8

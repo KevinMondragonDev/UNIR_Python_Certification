@@ -29,8 +29,8 @@ Los datos en `datos/ventas_particionadas/` se encuentran organizados físicament
 ### Tareas:
 1. Lee todo el dataset particionado de ventas en un único DataFrame.
 2. Imprime el esquema para comprobar que Spark detectó automáticamente `pais` y `anio` como columnas a pesar de ser carpetas.
-3. Realiza un filtro para obtener solo las ventas de **México** en el año **2023** y muestra el resultado en consola.
-4. Intenta cargar **únicamente** la carpeta correspondiente a `pais=España` de forma directa y muestra sus registros.
+3. Realiza un filtro para obtener solo las ventas de **Mexico** en el año **2023** y muestra el resultado en consola.
+4. Intenta cargar **únicamente** la carpeta correspondiente a `pais=Espana` de forma directa y muestra sus registros.
 
 ```python
 # 💡 Escribe tu solución aquí:
@@ -59,9 +59,9 @@ Una de las mayores ventajas de Parquet es que Spark no necesita leer todo el arc
 
 En entornos de Big Data y Data Lakes, los esquemas de los archivos pueden cambiar a lo largo del tiempo (por ejemplo, al añadir nuevos campos). Parquet permite unificar automáticamente esquemas distintos pero compatibles.
 
-En la carpeta `datos/usuarios_esquema/` tenemos dos subcarpetas con esquemas diferentes:
-*   `parte_a`: Contiene `id`, `nombre`, `email`.
-*   `parte_b`: Contiene `id`, `nombre`, `telefono` (sin columna `email`).
+En la carpeta `datos/usuarios_esquema/` tenemos dos subcarpetas con esquemas diferentes (en formato `clave=valor`, por eso Spark las descubre como la partición `parte`):
+*   `parte=a`: Contiene `id`, `nombre`, `email`.
+*   `parte=b`: Contiene `id`, `nombre`, `telefono` (sin columna `email`).
 
 ### Tareas:
 1. Intenta leer la carpeta raíz `datos/usuarios_esquema/` sin la opción `mergeSchema`. ¿Qué sucede con las columnas?

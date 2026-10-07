@@ -1,5 +1,6 @@
 import os
 import random
+import shutil
 import pandas as pd
 
 def main():
@@ -27,12 +28,16 @@ def main():
     df_ventas = pd.DataFrame(ventas_data)
     
     path_ventas = os.path.join(datos_dir, "ventas_particionadas")
+    # to_parquet con partition_cols AÑADE archivos: borrar antes evita mezclar ejecuciones
+    shutil.rmtree(path_ventas, ignore_errors=True)
     df_ventas.to_parquet(
         path_ventas,
         partition_cols=["pais", "anio"],
         index=False
     )
 
+    # Carpetas en formato clave=valor para que Spark las descubra como particiones
+    shutil.rmtree(os.path.join(datos_dir, "usuarios_esquema"), ignore_errors=True)
     print("Generando datos de usuarios grandes para Schema Merging (20,000 filas en total)...")
     nombres_semilla = ["Alice", "Bob", "Charlie", "David", "Eva", "Frank", "Grace", "Heidi", "Ivan", "Judy"]
     
@@ -47,7 +52,7 @@ def main():
         })
     df_usr_a = pd.DataFrame(usr_a_data)
     
-    path_usr_a = os.path.join(datos_dir, "usuarios_esquema", "parte_a")
+    path_usr_a = os.path.join(datos_dir, "usuarios_esquema", "parte=a")
     os.makedirs(path_usr_a, exist_ok=True)
     df_usr_a.to_parquet(os.path.join(path_usr_a, "data.parquet"), index=False)
 
@@ -62,7 +67,7 @@ def main():
         })
     df_usr_b = pd.DataFrame(usr_b_data)
     
-    path_usr_b = os.path.join(datos_dir, "usuarios_esquema", "parte_b")
+    path_usr_b = os.path.join(datos_dir, "usuarios_esquema", "parte=b")
     os.makedirs(path_usr_b, exist_ok=True)
     df_usr_b.to_parquet(os.path.join(path_usr_b, "data.parquet"), index=False)
 

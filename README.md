@@ -1,5 +1,10 @@
 # 🐍 UNIR · Certificación de Python para Big Data
 
+[![CI](https://github.com/KevinMondragonDev/UNIR-Certification-Python/actions/workflows/ci.yml/badge.svg)](https://github.com/KevinMondragonDev/UNIR-Certification-Python/actions/workflows/ci.yml)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
+![PySpark](https://img.shields.io/badge/pyspark-3.5%20%7C%204.x-orange)
+[![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+
 Repositorio de estudio y práctica para la certificación de Python del programa de **Maestría en Big Data (UNIR)**.
 
 Va de los fundamentos del lenguaje hasta el **procesamiento distribuido con PySpark**. Cada bloque combina teoría breve, ejercicios para completar y retos integradores. La ruta de Spark incluye además validadores automáticos para comprobar tu avance.
@@ -45,21 +50,24 @@ Tiene dos rutas complementarias:
 
 ## 🚀 Configuración
 
-### Python (módulos 01–04)
+### Opción A — Conda (recomendada: incluye Java para Spark)
 
 ```bash
-conda create --name desarrollo python=3.10
+conda env create -f environment.yml
 conda activate desarrollo
-pip install numpy pandas matplotlib seaborn plotly
 ```
 
-### Spark (módulo 05)
-
-PySpark necesita **Java 17 o superior**:
+### Opción B — pip
 
 ```bash
-java -version                       # debe mostrar 17+
-pip install pyspark pandas pyarrow
+python -m venv .venv && source .venv/bin/activate
+pip install -r requirements.txt
+java -version          # Spark necesita Java 17 o superior
+```
+
+Comprueba la instalación:
+
+```bash
 python -c "import pyspark; print(pyspark.__version__)"
 ```
 
@@ -79,9 +87,12 @@ python datasets/generar_datasets.py
 python fase_08_optimizacion_y_udfs/02_particionamiento.py
 python fase_08_optimizacion_y_udfs/validar.py
 
-# Reporte global de todas las fases
+# Reporte global de tu avance (validadores de cada fase)
 python supervision/test_global.py
 python supervision/test_global.py --fase 8 9 10
+
+# Comprobar que todo el material de referencia funciona (lo mismo que ejecuta la CI)
+python supervision/smoke_test.py
 
 # Clúster Spark real en tu máquina (fase 10), sin Docker
 ./fase_10_despliegue_cluster/cluster_local.sh start     # UI: http://localhost:8080
@@ -117,7 +128,11 @@ spark-submit --master spark://127.0.0.1:7077 --total-executor-cores 4 \
 │       ├── …
 │       ├── fase_10_despliegue_cluster/
 │       └── supervision/                test_global.py, progreso.md, rubrica.md
-└── 99_notas/                           comandos_de_inicio.md, convenciones.md
+├── 99_notas/                           comandos_de_inicio.md, convenciones.md
+├── .github/workflows/ci.yml            CI: sintaxis + smoke test de PySpark
+├── requirements.txt                    Dependencias pip
+├── environment.yml                     Entorno Conda (Python 3.10 + Java 17)
+└── LICENSE                             MIT
 ```
 
 ### Convención de nombres
@@ -131,6 +146,23 @@ spark-submit --master spark://127.0.0.1:7077 --total-executor-cores 4 \
 ## 🛠️ Tecnologías
 
 **Python 3.10+** · **NumPy** · **Pandas** · **Matplotlib** · **Seaborn** · **Plotly** · **PySpark** · **Apache Arrow** · **Conda** · **Docker** (opcional, para el clúster de la fase 10)
+
+---
+
+## ✅ Integración continua
+
+En cada push, GitHub Actions:
+
+1. Compila todos los `.py` del repositorio.
+2. Ejecuta `05_spark/02_ruta_sparksql/supervision/smoke_test.py` con Java 17 y Python 3.10. Corre los ejemplos de cada fase, las soluciones de los retos, el pipeline del proyecto integrador con su validador y el job de producción de la fase 10.
+
+Los `ejercicios.py` y los validadores de alumno no forman parte de la CI, porque dependen de que completes tu código.
+
+---
+
+## 📄 Licencia
+
+[MIT](LICENSE) © Kevin Mondragón Fresco
 
 ---
 

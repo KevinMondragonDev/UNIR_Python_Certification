@@ -55,7 +55,7 @@ df_sales.groupBy("anio") \
     .pivot("region", ["Norte", "Sur"]) \
     .agg(
         F.round(F.sum("amount"), 2).alias("total"),
-        F.count("*").alias("num")
+        F.count("sale_id").alias("num")   # pivot no admite count("*") en Spark 4
     ) \
     .orderBy("anio").show()
 

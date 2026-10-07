@@ -1,0 +1,14 @@
+# Análisis de datos y visualización (módulo 01)
+numpy>=1.24
+pandas>=2.0
+matplotlib>=3.7
+seaborn>=0.13
+plotly>=5.18
+
+# Retos prácticos (módulo 02)
+boto3>=1.28        # retos 15-16: procesamiento y validación en S3
+pyyaml>=6.0        # reto 09: sistema de configuración
+
+# Spark (módulo 05) — requiere Java 17 o superior
+pyspark>=3.5,<5
+pyarrow>=14.0      # Parquet desde pandas y Pandas UDFs

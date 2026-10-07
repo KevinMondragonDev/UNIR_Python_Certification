@@ -29,11 +29,11 @@ def main():
     
     # 3. Filtrar por México y 2023
     print("\nVentas filtradas para México en 2023:")
-    df_ventas.filter((col("pais") == "México") & (col("anio") == 2023)).show()
+    df_ventas.filter((col("pais") == "Mexico") & (col("anio") == 2023)).show()
     
     # 4. Cargar directamente una sola partición
     print("\nCarga directa de la partición de España (todos los años):")
-    path_espana = os.path.join(path_ventas, "pais=España")
+    path_espana = os.path.join(path_ventas, "pais=Espana")
     df_espana = spark.read.parquet(path_espana)
     df_espana.show()
 
@@ -59,7 +59,8 @@ def main():
     
     path_usuarios = os.path.join(datos_dir, "usuarios_esquema")
     
-    # Intento 1: Leer sin mergeSchema (tomará el esquema de una de las partes y fallará en la otra)
+    # Intento 1: Leer sin mergeSchema → Spark toma el esquema de UN archivo y pierde
+    # la columna que solo existe en la otra parte (email o telefono)
     try:
         print("\nLeyendo SIN mergeSchema:")
         df_sin_merge = spark.read.parquet(path_usuarios)

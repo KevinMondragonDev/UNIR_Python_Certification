@@ -1,0 +1,43 @@
+# Verifica en cada push que el material de referencia sigue funcionando.
+# No ejecuta ejercicios.py ni validadores de alumno (dependen de tu código).
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  sintaxis:
+    name: Sintaxis Python
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+      - name: Compilar todos los .py
+        run: python -m compileall -q .
+
+  spark:
+    name: Smoke test PySpark
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: pip
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+      - name: Ejemplos, soluciones y proyecto integrador
+        working-directory: 05_spark/02_ruta_sparksql
+        env:
+          PYSPARK_PYTHON: python
+        run: python supervision/smoke_test.py
